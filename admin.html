@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — SK Exotics</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--blue:#1565C0;--blue-light:#42A5F5;--gold:#FFD600;--bg:#050A1A;--card:#0A1628;--border:#1A2A4A;--text:#E8EAF6;--muted:#546E8A;--red:#EF5350;--green:#66BB6A}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;padding-bottom:60px}
+.topbar{background:#000;border-bottom:2px solid var(--gold);padding:12px 24px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;letter-spacing:4px;color:var(--gold)}
+.brand span{color:var(--blue-light);font-size:10px;letter-spacing:4px;display:block;font-weight:700}
+.admin-tag{background:rgba(255,214,0,0.1);border:1px solid rgba(255,214,0,0.3);border-radius:20px;padding:5px 14px;font-size:10px;letter-spacing:3px;color:var(--gold);font-weight:700}
+
+/* Login gate */
+#admin-gate{max-width:380px;margin:80px auto;padding:0 20px}
+#admin-gate h2{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;letter-spacing:3px;color:#fff;margin-bottom:8px}
+#admin-gate p{font-size:13px;color:var(--muted);margin-bottom:24px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:10px;letter-spacing:3px;color:var(--blue-light);text-transform:uppercase;margin-bottom:6px;font-weight:700}
+.field input{width:100%;background:#060F20;border:1px solid var(--border);border-radius:10px;padding:14px 16px;color:#fff;font-size:15px;font-family:'Barlow',sans-serif;outline:none}
+.field input:focus{border-color:var(--blue-light)}
+.btn{padding:14px 28px;background:linear-gradient(135deg,var(--blue),#0D47A1);color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;letter-spacing:3px;border:none;border-radius:10px;cursor:pointer;text-transform:uppercase;width:100%}
+
+/* Dashboard */
+#admin-dash{display:none;padding:0 0 40px}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:20px 20px 0;max-width:900px;margin:0 auto}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center}
+.stat .n{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;color:var(--gold)}
+.stat .l{font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:4px}
+
+.section{max-width:900px;margin:28px auto 0;padding:0 20px}
+.section-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.section-hd h2{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;letter-spacing:4px;color:var(--blue-light);text-transform:uppercase}
+.search{background:#060F20;border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;font-family:'Barlow',sans-serif;outline:none;width:220px}
+.search::placeholder{color:#2A3A5A}
+
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#060F20;color:var(--blue-light);padding:10px 14px;text-align:left;font-size:9px;letter-spacing:3px;font-weight:700;text-transform:uppercase;border-bottom:1px solid var(--border)}
+td{padding:12px 14px;border-bottom:1px solid var(--border);color:#ccc;vertical-align:middle}
+tr:hover td{background:rgba(21,101,192,0.05)}
+.pts-badge{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;color:var(--gold)}
+.phone-link{color:var(--blue-light);text-decoration:none;font-size:13px}
+.phone-link:hover{color:var(--gold)}
+.reward-tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.rt-none{background:#0d0d0d;color:var(--muted);border:1px solid var(--border)}
+.rt-75{background:rgba(21,101,192,0.15);color:var(--blue-light);border:1px solid rgba(21,101,192,0.3)}
+.rt-100{background:rgba(255,214,0,0.1);color:var(--gold);border:1px solid rgba(255,214,0,0.3)}
+.rt-150{background:rgba(102,187,106,0.1);color:var(--green);border:1px solid rgba(102,187,106,0.3)}
+.rt-200{background:rgba(186,104,200,0.15);color:#CE93D8;border:1px solid rgba(186,104,200,0.3)}
+.adj-btn{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none;letter-spacing:1px}
+.adj-add{background:rgba(21,101,192,0.2);color:var(--blue-light);border:1px solid rgba(21,101,192,0.3)}
+.adj-sub{background:rgba(239,83,80,0.15);color:var(--red);border:1px solid rgba(239,83,80,0.3)}
+
+/* Scans table */
+.scan-tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif}
+.scan-used{background:rgba(239,83,80,0.15);color:var(--red);border:1px solid rgba(239,83,80,0.3)}
+.scan-fresh{background:rgba(102,187,106,0.15);color:var(--green);border:1px solid rgba(102,187,106,0.3)}
+
+.msg{padding:10px 16px;border-radius:8px;font-size:13px;margin-top:12px;display:none}
+.msg.error{background:rgba(239,83,80,0.1);border:1px solid rgba(239,83,80,0.3);color:var(--red)}
+.msg.ok{background:rgba(102,187,106,0.1);border:1px solid rgba(102,187,106,0.3);color:var(--green)}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">SK EXOTICS<span>ADMIN PANEL</span></div>
+  <div class="admin-tag">🔐 RESTRICTED</div>
+</div>
+
+<!-- Login Gate -->
+<div id="admin-gate">
+  <h2>ADMIN ACCESS</h2>
+  <p>Enter the admin password to continue.</p>
+  <div class="field">
+    <label>Password</label>
+    <input type="password" id="admin-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()">
+  </div>
+  <button class="btn" onclick="adminLogin()">ACCESS PANEL</button>
+  <div class="msg" id="gate-msg"></div>
+</div>
+
+<!-- Admin Dashboard -->
+<div id="admin-dash">
+  <div class="stats-row">
+    <div class="stat"><div class="n" id="stat-users">—</div><div class="l">Total Members</div></div>
+    <div class="stat"><div class="n" id="stat-scans">—</div><div class="l">Total Scans</div></div>
+    <div class="stat"><div class="n" id="stat-pts">—</div><div class="l">Points Issued</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-hd">
+      <h2>👥 All Members</h2>
+      <input class="search" type="text" placeholder="Search name or phone..." oninput="filterUsers(this.value)" id="user-search">
+    </div>
+    <table>
+      <thead><tr><th>Name</th><th>Phone</th><th>Points</th><th>Reward Tier</th><th>Joined</th><th>Adjust</th></tr></thead>
+      <tbody id="users-tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="section" style="margin-top:32px">
+    <div class="section-hd">
+      <h2>📦 Scan Log</h2>
+      <input class="search" type="text" placeholder="Search jar ID..." oninput="filterScans(this.value)" id="scan-search">
+    </div>
+    <table>
+      <thead><tr><th>Jar ID</th><th>Status</th><th>Scanned By</th><th>Scanned At</th></tr></thead>
+      <tbody id="scans-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://duxcejvqicvdidnnhbnc.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1eGNlanZxaWN2ZGlkbm5oYm5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTY1OTIsImV4cCI6MjA4ODgzMjU5Mn0.5DUgoKJ6NLkSTDjn6thmLmEVQpy3rU5TRafw0xykpdA';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const ADMIN_PASS = 'skexotics2024admin';
+let allUsers = [], allScans = [];
+
+function adminLogin() {
+  const pass = document.getElementById('admin-pass').value;
+  if (pass !== ADMIN_PASS) {
+    const msg = document.getElementById('gate-msg');
+    msg.textContent = 'Incorrect password';
+    msg.className = 'msg error';
+    msg.style.display = 'block';
+    return;
+  }
+  sessionStorage.setItem('sk_admin', '1');
+  document.getElementById('admin-gate').style.display = 'none';
+  document.getElementById('admin-dash').style.display = 'block';
+  loadData();
+}
+
+function rewardTier(pts) {
+  if (pts >= 200) return '<span class="reward-tag rt-200">💎 200 — FREE JAR + 20% OFF</span>';
+  if (pts >= 150) return '<span class="reward-tag rt-150">👑 150 — 2 JARS + 7G</span>';
+  if (pts >= 100) return '<span class="reward-tag rt-100">💰 100 — 20% OFF</span>';
+  if (pts >= 75) return '<span class="reward-tag rt-75">🎁 75 — FREE JAR</span>';
+  return '<span class="reward-tag rt-none">—</span>';
+}
+
+function renderUsers(users) {
+  document.getElementById('users-tbody').innerHTML = users.map(u => `
+    <tr>
+      <td><strong style="color:#fff">${u.name || '—'}</strong></td>
+      <td><a class="phone-link" href="tel:${u.phone}">${u.phone}</a></td>
+      <td><span class="pts-badge">${u.points}</span></td>
+      <td>${rewardTier(u.points)}</td>
+      <td style="color:var(--muted);font-size:11px">${new Date(u.created_at).toLocaleDateString('en-GB')}</td>
+      <td>
+        <button class="adj-btn adj-add" onclick="adjustPoints('${u.id}',15)">+15</button>
+        <button class="adj-btn adj-sub" onclick="adjustPoints('${u.id}',-15)" style="margin-left:4px">-15</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderScans(scans) {
+  document.getElementById('scans-tbody').innerHTML = scans.map(s => {
+    const user = allUsers.find(u => u.id === s.scanned_by);
+    return `
+      <tr>
+        <td><strong style="color:#fff;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px">${s.jar_id.toUpperCase()}</strong></td>
+        <td>${s.scanned_by ? '<span class="scan-tag scan-used">SCANNED</span>' : '<span class="scan-tag scan-fresh">UNUSED</span>'}</td>
+        <td style="color:var(--blue-light)">${user ? (user.name || user.phone) : '—'}</td>
+        <td style="color:var(--muted);font-size:11px">${s.scanned_at ? new Date(s.scanned_at).toLocaleString('en-GB') : '—'}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterUsers(q) {
+  const f = q.toLowerCase();
+  renderUsers(allUsers.filter(u => (u.name||'').toLowerCase().includes(f) || u.phone.includes(f)));
+}
+
+function filterScans(q) {
+  const f = q.toLowerCase();
+  renderScans(allScans.filter(s => s.jar_id.toLowerCase().includes(f)));
+}
+
+async function adjustPoints(userId, delta) {
+  const user = allUsers.find(u => u.id === userId);
+  if (!user) return;
+  const newPts = Math.max(0, user.points + delta);
+  await sb.from('users').update({points: newPts}).eq('id', userId);
+  user.points = newPts;
+  renderUsers(allUsers);
+  document.getElementById('stat-pts').textContent = allUsers.reduce((a,u)=>a+u.points,0);
+}
+
+async function loadData() {
+  const [{ data: users }, { data: scans }] = await Promise.all([
+    sb.from('users').select('*').order('points', {ascending:false}),
+    sb.from('scans').select('*').order('scanned_at', {ascending:false})
+  ]);
+  allUsers = users || [];
+  allScans = scans || [];
+  document.getElementById('stat-users').textContent = allUsers.length;
+  document.getElementById('stat-scans').textContent = allScans.filter(s=>s.scanned_by).length;
+  document.getElementById('stat-pts').textContent = allUsers.reduce((a,u)=>a+u.points,0);
+  renderUsers(allUsers);
+  renderScans(allScans);
+}
+
+if (sessionStorage.getItem('sk_admin')) {
+  document.getElementById('admin-gate').style.display = 'none';
+  document.getElementById('admin-dash').style.display = 'block';
+  loadData();
+}
+</script>
+</body>
+</html>

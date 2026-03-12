@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SK Exotics — Members</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--blue:#1565C0;--blue-light:#42A5F5;--blue-dark:#0D47A1;--gold:#FFD600;--bg:#050A1A;--card:#0A1628;--border:#1A2A4A;--text:#E8EAF6;--muted:#546E8A}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.logo-wrap{text-align:center;margin-bottom:32px}
+.logo-wrap img{width:90px;margin-bottom:12px}
+.brand{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;letter-spacing:5px;color:var(--gold)}
+.brand span{display:block;font-size:12px;letter-spacing:6px;color:var(--blue-light);margin-top:2px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px 28px;width:100%;max-width:400px;box-shadow:0 8px 40px rgba(0,0,0,0.5)}
+.card h2{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;letter-spacing:3px;color:#fff;margin-bottom:6px;text-transform:uppercase}
+.card p{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:10px;letter-spacing:3px;color:var(--blue-light);text-transform:uppercase;margin-bottom:6px;font-weight:700}
+.field input{width:100%;background:#060F20;border:1px solid var(--border);border-radius:10px;padding:14px 16px;color:#fff;font-size:15px;font-family:'Barlow',sans-serif;outline:none;transition:border-color 0.2s}
+.field input:focus{border-color:var(--blue-light)}
+.field input::placeholder{color:#2A3A5A}
+.btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;letter-spacing:3px;border:none;border-radius:10px;cursor:pointer;text-transform:uppercase;margin-top:8px;transition:opacity 0.2s}
+.btn:hover{opacity:0.9}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+.msg{margin-top:16px;padding:12px 16px;border-radius:10px;font-size:13px;text-align:center;display:none}
+.msg.error{background:rgba(211,47,47,0.15);border:1px solid rgba(211,47,47,0.3);color:#EF9A9A}
+.msg.success{background:rgba(21,101,192,0.15);border:1px solid rgba(66,165,245,0.3);color:var(--blue-light)}
+.divider{text-align:center;color:var(--muted);font-size:11px;letter-spacing:2px;margin:20px 0;position:relative}
+.divider::before,.divider::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:var(--border)}
+.divider::before{left:0}.divider::after{right:0}
+.tab-wrap{display:flex;gap:0;margin-bottom:24px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.tab{flex:1;padding:10px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer;color:var(--muted);background:transparent;border:none;transition:all 0.2s;text-transform:uppercase}
+.tab.active{background:var(--blue);color:var(--gold)}
+.hint{font-size:11px;color:#2A3A5A;text-align:center;margin-top:16px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="logo-wrap">
+  <img src="sk_logo.png" alt="SK Exotics" onerror="this.style.display='none'">
+  <div class="brand">SK EXOTICS<span>MEMBERS CLUB</span></div>
+</div>
+<div class="card">
+  <div class="tab-wrap">
+    <button class="tab active" onclick="showTab('login')">LOGIN</button>
+    <button class="tab" onclick="showTab('register')">REGISTER</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="login-form">
+    <h2>Welcome Back</h2>
+    <p>Enter your phone number to access your points and rewards.</p>
+    <div class="field">
+      <label>Phone Number</label>
+      <input type="tel" id="login-phone" placeholder="+44 7700 000000">
+    </div>
+    <button class="btn" onclick="login()">ACCESS MY ACCOUNT</button>
+  </div>
+
+  <!-- REGISTER -->
+  <div id="register-form" style="display:none">
+    <h2>Create Account</h2>
+    <p>Register with the phone number you want to use for rewards. Only available after scanning a jar.</p>
+    <div class="field">
+      <label>Full Name</label>
+      <input type="text" id="reg-name" placeholder="Your name">
+    </div>
+    <div class="field">
+      <label>Phone Number</label>
+      <input type="tel" id="reg-phone" placeholder="+44 7700 000000">
+    </div>
+    <button class="btn" onclick="register()">CREATE ACCOUNT</button>
+  </div>
+
+  <div class="msg" id="msg"></div>
+  <div class="hint">🔒 Account access is only granted to verified SK Exotics customers</div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://duxcejvqicvdidnnhbnc.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1eGNlanZxaWN2ZGlkbm5oYm5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTY1OTIsImV4cCI6MjA4ODgzMjU5Mn0.5DUgoKJ6NLkSTDjn6thmLmEVQpy3rU5TRafw0xykpdA';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+function showTab(tab) {
+  document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (tab==='login'&&i===0)||(tab==='register'&&i===1)));
+  hideMsg();
+}
+
+function showMsg(text, type) {
+  const el = document.getElementById('msg');
+  el.textContent = text;
+  el.className = 'msg ' + type;
+  el.style.display = 'block';
+}
+function hideMsg() { document.getElementById('msg').style.display = 'none'; }
+
+function cleanPhone(p) { return p.replace(/\s+/g,'').replace(/^0/,'+44'); }
+
+async function login() {
+  const phone = cleanPhone(document.getElementById('login-phone').value.trim());
+  if (!phone) return showMsg('Please enter your phone number', 'error');
+  const btn = document.querySelector('#login-form .btn');
+  btn.disabled = true; btn.textContent = 'CHECKING...';
+  const { data, error } = await sb.from('users').select('*').eq('phone', phone).single();
+  btn.disabled = false; btn.textContent = 'ACCESS MY ACCOUNT';
+  if (error || !data) return showMsg('No account found. Please register first.', 'error');
+  localStorage.setItem('sk_user', JSON.stringify(data));
+  window.location.href = 'dashboard.html';
+}
+
+async function register() {
+  const name = document.getElementById('reg-name').value.trim();
+  const phone = cleanPhone(document.getElementById('reg-phone').value.trim());
+  if (!name || !phone) return showMsg('Please fill in all fields', 'error');
+  const btn = document.querySelector('#register-form .btn');
+  btn.disabled = true; btn.textContent = 'CREATING...';
+  // Check if already exists
+  const { data: existing } = await sb.from('users').select('id').eq('phone', phone).single();
+  if (existing) { btn.disabled = false; btn.textContent = 'CREATE ACCOUNT'; return showMsg('Account already exists. Please login.', 'error'); }
+  const { data, error } = await sb.from('users').insert([{ phone, name, points: 0 }]).select().single();
+  btn.disabled = false; btn.textContent = 'CREATE ACCOUNT';
+  if (error) return showMsg('Error creating account. Try again.', 'error');
+  localStorage.setItem('sk_user', JSON.stringify(data));
+  window.location.href = 'dashboard.html';
+}
+</script>
+</body>
+</html>
