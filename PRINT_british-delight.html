@@ -14,16 +14,17 @@ body{font-family:Arial,sans-serif;background:#fff}
 .sticker{border:2px solid #1565C0;border-radius:3mm;padding:3mm 2mm;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;aspect-ratio:1}
 .s-top{font-size:6.5pt;font-weight:900;letter-spacing:.5px;text-transform:uppercase;text-align:center;color:#1565C0;margin-bottom:2.5mm}
 .qr-wrap{border:2px solid #050A1A;padding:1.5mm;background:#fff;line-height:0}
-.s-num{font-size:13pt;font-weight:900;color:#050A1A;margin-top:2.5mm;letter-spacing:2px}
+.s-num{font-size:10pt;font-weight:900;color:#050A1A;margin-top:2.5mm;letter-spacing:1px}
 .s-dates{font-size:5pt;color:#666;margin-top:1.5mm;text-align:center;line-height:1.6}
 .s-brand{font-size:5.5pt;font-weight:900;letter-spacing:2px;color:#1565C0;margin-top:1.5mm;text-transform:uppercase}
 </style></head>
 <body>
-<div class="screen">⭐ SK EXOTICS — BRITISH DELIGHT PRINT SHEET <small>4 QR labels · unique per jar · Cut &amp; stick</small></div>
+<div class="screen">⭐ SK EXOTICS — BRITISH DELIGHT PRINT SHEET <small>4 unique QR codes · one per jar</small></div>
 <button class="btn" onclick="window.print()">🖨️ PRINT (4 QR CODES)</button>
 <div id="pages"></div>
 <script>
-const urls=["https://skexotics.com/products/british-delight-01.html","https://skexotics.com/products/british-delight-02.html","https://skexotics.com/products/british-delight-03.html","https://skexotics.com/products/british-delight-04.html"];
+const urls=["https://skexotics.com/products/3CxdpYffUByatjw1HF7LCQ.html","https://skexotics.com/products/rJIPGEGYurvyD3KkuK-hWA.html","https://skexotics.com/products/0FTGCCJ4cuABtmZUBEj7Iw.html","https://skexotics.com/products/bWkbq8DjfV_W2UW5HMPZoQ.html"];
+const labels=["British Delight #01","British Delight #02","British Delight #03","British Delight #04"];
 const pagesDiv=document.getElementById('pages');
 const perPage=6;
 const totalPages=Math.ceil(urls.length/perPage);
@@ -32,9 +33,8 @@ for(let p=0;p<totalPages;p++){
   const start=p*perPage;
   const end=Math.min(start+perPage,urls.length);
   for(let i=start;i<end;i++){
-    const num=String(i+1).padStart(2,'0');
     const el=document.createElement('div');el.className='sticker';
-    el.innerHTML=`<div class="s-top">British Delight</div><div class="qr-wrap" id="q${i}"></div><div class="s-num">#${num}</div><div class="s-dates">Cultivated: 06/01/2026<br>Packaged: 10/03/2026</div><div class="s-brand">SK EXOTICS</div>`;
+    el.innerHTML=`<div class="s-top">British Delight</div><div class="qr-wrap" id="q${i}"></div><div class="s-num">${labels[i]}</div><div class="s-dates">Cultivated: 06/01/2026<br>Packaged: 10/03/2026</div><div class="s-brand">SK EXOTICS</div>`;
     pg.appendChild(el);
   }
   pagesDiv.appendChild(pg);

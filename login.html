@@ -51,27 +51,34 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-
   <!-- LOGIN -->
   <div id="login-form">
     <h2>Welcome Back</h2>
-    <p>Enter your phone number to access your points and rewards.</p>
+    <p>Enter the phone number you registered with to check your points and rewards.</p>
     <div class="field">
-      <label>Phone Number</label>
+      <label>Your Phone Number</label>
       <input type="tel" id="login-phone" placeholder="+44 7700 000000">
     </div>
     <button class="btn" onclick="login()">ACCESS MY ACCOUNT</button>
+    <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.7">
+      New customer? Tap <strong style="color:var(--gold)">REGISTER</strong> above 👆<br>
+      You must scan a jar first to be eligible.
+    </div>
   </div>
 
   <!-- REGISTER -->
   <div id="register-form" style="display:none">
     <h2>Create Account</h2>
-    <p>Register with the phone number you want to use for rewards. Only available after scanning a jar.</p>
+    <p>Just scanned your first SK Exotics jar? Create your account below to claim your <strong style="color:var(--gold)">+15 points</strong> and start earning rewards.</p>
     <div class="field">
-      <label>Full Name</label>
+      <label>Your Name</label>
       <input type="text" id="reg-name" placeholder="Your name">
     </div>
     <div class="field">
-      <label>Phone Number</label>
+      <label>Your Phone Number</label>
       <input type="tel" id="reg-phone" placeholder="+44 7700 000000">
     </div>
-    <button class="btn" onclick="register()">CREATE ACCOUNT</button>
+    <button class="btn" onclick="register()">CREATE MY ACCOUNT</button>
+    <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.7">
+      Already have an account? Tap <strong style="color:var(--gold)">LOGIN</strong> above 👆
+    </div>
   </div>
 
   <div class="msg" id="msg"></div>
