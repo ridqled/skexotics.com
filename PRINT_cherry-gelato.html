@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<title>SK Exotics — Cherry Gelato — Print Sheet</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+@page{size:A4;margin:8mm}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#fff}
+.screen{background:#050A1A;color:#FFD600;padding:14px 20px;font-family:'Arial Black',Arial,sans-serif;font-size:16px;letter-spacing:2px;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #B01030}
+.screen small{color:#E8304A;font-size:11px;font-weight:normal;font-family:Arial}
+.btn{display:block;margin:14px auto;padding:12px 40px;background:#B01030;color:#fff;font-size:15px;font-weight:900;border:none;border-radius:8px;cursor:pointer;letter-spacing:1px}
+@media print{.screen,.btn{display:none!important}}
+.a4{width:210mm;min-height:297mm;page-break-after:always;padding:6mm;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:5mm}
+.sticker{border:2px solid #B01030;border-radius:3mm;padding:3mm 2mm;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;aspect-ratio:1}
+.s-top{font-size:6.5pt;font-weight:900;letter-spacing:.5px;text-transform:uppercase;text-align:center;color:#B01030;margin-bottom:2.5mm}
+.qr-wrap{border:2px solid #050A1A;padding:1.5mm;background:#fff;line-height:0}
+.s-name{font-size:9pt;font-weight:900;color:#050A1A;margin-top:2.5mm;letter-spacing:1px;text-align:center}
+.s-dates{font-size:5pt;color:#666;margin-top:1.5mm;text-align:center;line-height:1.6}
+.s-brand{font-size:5.5pt;font-weight:900;letter-spacing:2px;color:#B01030;margin-top:1.5mm;text-transform:uppercase}
+.s-emoji{font-size:8pt;margin-bottom:1mm}
+</style></head>
+<body>
+
+<div class="screen">🍒 SK EXOTICS — CHERRY GELATO PRINT SHEET <small>Universal QR · skexotics.com/cherry-gelato</small></div>
+<button class="btn" onclick="window.print()">🖨️ PRINT STICKERS</button>
+<div id="pages"></div>
+
+<script>
+const URL='https://skexotics.com/cherry-gelato';
+const STRAIN='Cherry Gelato';
+const BRAND='SK EXOTICS';
+const BATCH='CHERRY-GEL-01';
+const PER_PAGE=12; // 3 columns × 4 rows
+const TOTAL=12; // change this number to print more/fewer stickers
+
+const pagesDiv=document.getElementById('pages');
+const totalPages=Math.ceil(TOTAL/PER_PAGE);
+
+for(let p=0;p<totalPages;p++){
+  const pg=document.createElement('div');pg.className='a4';
+  const start=p*PER_PAGE;
+  const end=Math.min(start+PER_PAGE,TOTAL);
+  for(let i=start;i<end;i++){
+    const el=document.createElement('div');el.className='sticker';
+    const today=new Date().toLocaleDateString('en-GB');
+    el.innerHTML=`
+      <div class="s-emoji">🍒</div>
+      <div class="s-top">${STRAIN}</div>
+      <div class="qr-wrap" id="q${i}"></div>
+      <div class="s-name">${BRAND}</div>
+      <div class="s-dates">Batch: ${BATCH}<br>Date: ${today}</div>
+      <div class="s-brand">skexotics.com</div>`;
+    pg.appendChild(el);
+  }
+  pagesDiv.appendChild(pg);
+}
+
+window.addEventListener('load',()=>{
+  for(let i=0;i<TOTAL;i++){
+    new QRCode(document.getElementById('q'+i),{
+      text:URL,
+      width:120,
+      height:120,
+      colorDark:'#000000',
+      colorLight:'#ffffff',
+      correctLevel:QRCode.CorrectLevel.H
+    });
+  }
+});
+</script>
+</body></html>

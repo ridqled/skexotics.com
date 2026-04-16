@@ -1,1 +1,152 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta http-equiv="refresh" content="0;url=/login.html"><title>SK Exotics</title></head><body></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cherry Gelato — SK Exotics</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--blue:#1565C0;--blue-light:#42A5F5;--blue-dark:#0D47A1;--gold:#FFD600;--bg:#050A1A;--card:#0A1628;--border:#1A2A4A;--text:#E8EAF6;--muted:#546E8A;--cherry:#B01030;--cherry-light:#E8304A;--cherry-dark:#7A0820}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+.topbar{width:100%;background:linear-gradient(135deg,#050A1A,#0D1B35);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;justify-content:space-between;align-items:center}
+.logo-wrap{display:flex;align-items:center;gap:10px}
+.logo-img{width:40px;height:40px;object-fit:contain}
+.brand{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:900;letter-spacing:3px;color:var(--gold);text-decoration:none;line-height:1}
+.brand span{color:var(--blue-light);display:block;font-size:10px;letter-spacing:4px;font-weight:700}
+.verified-badge{background:linear-gradient(135deg,var(--cherry-dark),var(--cherry));border:1px solid var(--cherry-light);border-radius:20px;padding:5px 12px;font-size:10px;letter-spacing:2px;color:#fff;font-weight:700;font-family:'Barlow Condensed',sans-serif}
+.hero{width:100%;max-width:480px;padding:24px 20px 0;display:flex;flex-direction:column;align-items:center}
+.strain-img-wrap{width:100%;max-width:300px;height:300px;background:linear-gradient(135deg,var(--card),var(--cherry-dark));border-radius:20px;border:2px solid rgba(176,16,48,0.4);overflow:hidden;display:flex;align-items:center;justify-content:center;box-shadow:0 0 40px rgba(176,16,48,0.3);position:relative}
+.strain-img-wrap img{width:100%;height:100%;object-fit:cover;border-radius:18px}
+.strain-img-placeholder{font-family:'Barlow Condensed',sans-serif;font-size:20px;color:var(--cherry-light);letter-spacing:3px;text-align:center;padding:20px}
+.strain-name{font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:900;letter-spacing:3px;color:#fff;margin-top:20px;text-align:center;text-transform:uppercase;line-height:1}
+.strain-num{font-size:11px;letter-spacing:5px;color:var(--cherry-light);margin-top:6px;text-align:center;font-weight:700}
+.official-tag{margin-top:12px;background:linear-gradient(135deg,#0D1B35,#1A2A4A);border:1px solid var(--cherry-light);border-radius:8px;padding:8px 16px;font-size:11px;letter-spacing:1.5px;color:var(--cherry-light);text-align:center}
+.badges{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center}
+.badge{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;font-weight:600}
+.badge.type{color:var(--cherry-light);border-color:rgba(176,16,48,0.4);background:rgba(176,16,48,0.07)}
+.card{width:100%;max-width:480px;margin:18px 20px 0;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 20px}
+.card-label{font-size:8px;letter-spacing:4px;color:var(--cherry-light);text-transform:uppercase;margin-bottom:8px;font-weight:700}
+.card p{font-size:13px;color:#90A4C0;line-height:1.8}
+.info-grid{width:100%;max-width:480px;margin:14px 20px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.info-cell{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.info-cell .lbl{font-size:8px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:5px;font-weight:700}
+.info-cell .val{font-size:13px;color:#E8EAF6;font-weight:600}
+.scan-banner{width:100%;max-width:480px;margin:14px 20px 0;border-radius:14px;padding:18px 20px;text-align:center}
+.scan-banner h3{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;letter-spacing:2px;margin-bottom:6px;color:var(--gold)}
+.scan-banner p{font-size:12px;line-height:1.6;color:#90A4C0}
+.scan-banner .pts{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:var(--gold);display:block;margin:8px 0 4px}
+.login-btn{display:inline-block;margin-top:14px;padding:12px 28px;background:linear-gradient(135deg,var(--cherry),var(--cherry-dark));color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;letter-spacing:3px;border:none;border-radius:10px;cursor:pointer;text-decoration:none;text-transform:uppercase}
+.verify-strip{width:100%;max-width:480px;margin:14px 20px 0;background:linear-gradient(135deg,rgba(176,16,48,0.08),rgba(122,8,32,0.12));border:1px solid rgba(176,16,48,0.3);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:12px}
+.verify-text{font-size:11px;color:var(--cherry-light);line-height:1.6}
+.verify-text strong{color:var(--gold);display:block;font-size:12px;letter-spacing:1px;margin-bottom:2px}
+.footer{width:100%;max-width:480px;margin:20px 20px 40px;border-top:1px solid var(--border);padding-top:16px;display:flex;justify-content:space-between;align-items:center}
+.footer-brand{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;letter-spacing:3px;color:var(--muted)}
+.footer-url{font-size:10px;color:#2A3A5A;letter-spacing:1px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo-wrap">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAA4T0lEQVR4nO29d7hkVZX3/9knVk43x+7b3XSmm25yzoiooAiCggKivI6OOcKo4yiGUcc4AzIImEBEBImSoYlNNw2d88373rp1K1eduH9/1G3Ud5wZX3/aunmaVqeqztp77bW+tc9aBJAcxAEL5fWewEHMLg4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOA4SfIDjIMEHOP4P+UEbgYO+cHAAAAAASUVORK5CYII=" alt="SK Exotics" class="logo-img">
+    <a class="brand" href="/login.html">SK EXOTICS<span>PREMIUM QUALITY</span></a>
+  </div>
+  <div class="verified-badge">🍒 VERIFIED</div>
+</div>
+
+<div class="hero">
+  <div class="strain-img-wrap">
+    <!-- Replace src below with actual product image URL once available -->
+    <div class="strain-img-placeholder">🍒<br>CHERRY<br>GELATO<br><br><span style="font-size:11px;color:var(--muted)">IMAGE COMING SOON</span></div>
+  </div>
+
+  <div class="strain-name">Cherry Gelato</div>
+  <div class="strain-num">SK EXOTICS — STRAIN VERIFIED</div>
+  <div class="official-tag">✅ Official SK Exotics Product — Verified &amp; Authenticated</div>
+
+  <div class="badges">
+    <span class="badge type">Hybrid</span>
+    <span class="badge">Lineage: Cherry Pie × Gelato</span>
+  </div>
+</div>
+
+<div class="scan-banner" id="scan-banner" style="background:linear-gradient(135deg,rgba(176,16,48,0.15),rgba(122,8,32,0.2));border:1px solid rgba(232,48,74,0.4)">
+  <h3>🍒 AUTHENTIC PRODUCT</h3>
+  <p>You're holding a genuine SK Exotics Cherry Gelato.</p>
+  <span class="pts">+15 PTS</span>
+  <p id="scan-sub">Login or register to claim your loyalty points!</p>
+  <div id="scan-action"></div>
+</div>
+
+<div class="card" style="margin-top:18px">
+  <div class="card-label">Strain Profile</div>
+  <p>Sweet, creamy cherry with a rich gelato finish. This hybrid delivers a balanced high with deep fruity terps and a smooth smoke. Dense, frosty buds with a cherry-red tinge — a premium showpiece strain.</p>
+</div>
+
+<div class="info-grid">
+  <div class="info-cell"><div class="lbl">Batch Date</div><div class="val" id="batch-date">—</div></div>
+  <div class="info-cell"><div class="lbl">Quality Checked</div><div class="val" id="qc-date">—</div></div>
+  <div class="info-cell"><div class="lbl">Batch ID</div><div class="val">CHERRY-GEL-01</div></div>
+  <div class="info-cell"><div class="lbl">Strain Type</div><div class="val">Hybrid</div></div>
+</div>
+
+<div class="verify-strip">
+  <div style="font-size:22px">🔐</div>
+  <div class="verify-text">
+    <strong>SK EXOTICS — OFFICIAL PRODUCT</strong>
+    This QR code is linked to Cherry Gelato by SK Exotics. Scan to earn 15 loyalty points on every authentic pack. If purchased from an unauthorised source, contact us immediately.
+  </div>
+</div>
+
+<div class="footer">
+  <span class="footer-brand">SK EXOTICS</span>
+  <span class="footer-url">skexotics.com</span>
+</div>
+
+<script>
+const SUPABASE_URL='https://duxcejvqicvdidnnhbnc.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1eGNlanZxaWN2ZGlkbm5oYm5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTY1OTIsImV4cCI6MjA4ODgzMjU5Mn0.5DUgoKJ6NLkSTDjn6thmLmEVQpy3rU5TRafw0xykpdA';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+// Set dynamic dates
+const now=new Date();
+const fmt=d=>d.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'});
+document.getElementById('batch-date').textContent=fmt(now);
+document.getElementById('qc-date').textContent=fmt(now);
+
+// Loyalty points flow
+const actionEl=document.getElementById('scan-action');
+const subEl=document.getElementById('scan-sub');
+const rawUser=localStorage.getItem('sk_user');
+
+if(rawUser){
+  const user=JSON.parse(rawUser);
+  const STRAIN_KEY='cherry-gelato';
+  const scannedKey='sk_scanned_'+STRAIN_KEY;
+  const alreadyScanned=localStorage.getItem(scannedKey);
+
+  if(!alreadyScanned){
+    // Award points
+    (async()=>{
+      const newPoints=(user.points||0)+15;
+      await sb.from('users').update({points:newPoints}).eq('id',user.id);
+      user.points=newPoints;
+      localStorage.setItem('sk_user',JSON.stringify(user));
+      localStorage.setItem(scannedKey,'1');
+      subEl.innerHTML=`Welcome back, <strong style="color:var(--gold)">${user.name||user.phone}</strong>! Points earned.`;
+      actionEl.innerHTML=`<a class="login-btn" href="/dashboard.html">VIEW MY REWARDS →</a>`;
+    })();
+  } else {
+    subEl.textContent='Points already claimed for this strain. Check your dashboard.';
+    actionEl.innerHTML=`<a class="login-btn" href="/dashboard.html">MY DASHBOARD</a>`;
+  }
+} else {
+  localStorage.setItem('sk_pending_scan','cherry-gelato');
+  actionEl.innerHTML=`<a class="login-btn" href="/login.html?strain=cherry-gelato">CLAIM MY POINTS</a>`;
+}
+</script>
+
+</body>
+</html>
