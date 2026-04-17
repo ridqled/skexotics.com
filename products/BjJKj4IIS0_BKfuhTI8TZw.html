@@ -86,7 +86,7 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-
   <div style="font-size:22px">🔐</div>
   <div class="verify-text">
     <strong>SK EXOTICS — OFFICIAL PRODUCT</strong>
-    This QR code is unique to jar #081 of this batch. First scan earns 15 loyalty points. If you did not purchase from an authorised SK Exotics supplier, contact us immediately.
+    This QR code is unique to jar #081 of this batch. First scan earns 5 loyalty points. If you did not purchase from an authorised SK Exotics supplier, contact us immediately.
   </div>
 </div>
 <div class="footer">
@@ -123,7 +123,7 @@ async function processScan() {
     banner.innerHTML = `
       <h3>🎉 AUTHENTIC JAR!</h3>
       <p>This is a genuine SK Exotics product.</p>
-      <span class="pts">+15 PTS</span>
+      <span class="pts">+5 PTS</span>
       <p>Login or create an account to claim your points and build towards rewards!</p>
       <a class="login-btn" href="/login.html?jar=BjJKj4IIS0_BKfuhTI8TZw">CLAIM MY POINTS</a>
     `;
@@ -139,7 +139,7 @@ async function processScan() {
     scanned_at: new Date().toISOString()
   }, { onConflict: 'jar_id' });
 
-  const newPoints = (user.points || 0) + 15;
+  const newPoints = (user.points || 0) + 5;
   await sb.from('users').update({ points: newPoints }).eq('id', user.id);
   user.points = newPoints;
   localStorage.setItem('sk_user', JSON.stringify(user));
@@ -148,7 +148,7 @@ async function processScan() {
   banner.innerHTML = `
     <h3>✅ POINTS EARNED!</h3>
     <p>Welcome back, ${(user.name || user.phone)}!</p>
-    <span class="pts">+15 PTS</span>
+    <span class="pts">+5 PTS</span>
     <p>You now have <strong style="color:var(--gold)">${newPoints} total points</strong>.</p>
     <a class="login-btn" href="/dashboard.html">VIEW MY REWARDS</a>
   `;
