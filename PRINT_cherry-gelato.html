@@ -6,66 +6,54 @@
 @page{size:A4;margin:8mm}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#fff}
-.screen{background:#050A1A;color:#FFD600;padding:14px 20px;font-family:'Arial Black',Arial,sans-serif;font-size:16px;letter-spacing:2px;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #B01030}
-.screen small{color:#E8304A;font-size:11px;font-weight:normal;font-family:Arial}
-.btn{display:block;margin:14px auto;padding:12px 40px;background:#B01030;color:#fff;font-size:15px;font-weight:900;border:none;border-radius:8px;cursor:pointer;letter-spacing:1px}
+.screen{background:#050A1A;color:#FFD600;padding:14px 20px;font-family:'Arial Black',Arial,sans-serif;font-size:16px;letter-spacing:2px;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #1565C0}
+.screen small{color:#42A5F5;font-size:11px;font-weight:normal;font-family:Arial}
+.btn{display:block;margin:14px auto;padding:12px 40px;background:#1565C0;color:#FFD600;font-size:15px;font-weight:900;border:none;border-radius:8px;cursor:pointer;letter-spacing:1px}
 @media print{.screen,.btn{display:none!important}}
-.a4{width:210mm;min-height:297mm;page-break-after:always;padding:6mm;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:5mm}
-.sticker{border:2px solid #B01030;border-radius:3mm;padding:3mm 2mm;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;aspect-ratio:1}
-.s-top{font-size:6.5pt;font-weight:900;letter-spacing:.5px;text-transform:uppercase;text-align:center;color:#B01030;margin-bottom:2.5mm}
+.a4{width:210mm;min-height:297mm;page-break-after:always;padding:6mm;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:6mm}
+.sticker{border:2px solid #1565C0;border-radius:3mm;padding:3mm 2mm;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;aspect-ratio:1}
+.s-top{font-size:6.5pt;font-weight:900;letter-spacing:.5px;text-transform:uppercase;text-align:center;color:#1565C0;margin-bottom:2.5mm}
 .qr-wrap{border:2px solid #050A1A;padding:1.5mm;background:#fff;line-height:0}
-.s-name{font-size:9pt;font-weight:900;color:#050A1A;margin-top:2.5mm;letter-spacing:1px;text-align:center}
+.s-num{font-size:10pt;font-weight:900;color:#050A1A;margin-top:2.5mm;letter-spacing:1px}
 .s-dates{font-size:5pt;color:#666;margin-top:1.5mm;text-align:center;line-height:1.6}
-.s-brand{font-size:5.5pt;font-weight:900;letter-spacing:2px;color:#B01030;margin-top:1.5mm;text-transform:uppercase}
-.s-emoji{font-size:8pt;margin-bottom:1mm}
+.s-brand{font-size:5.5pt;font-weight:900;letter-spacing:2px;color:#1565C0;margin-top:1.5mm;text-transform:uppercase}
 </style></head>
 <body>
-
-<div class="screen">🍒 SK EXOTICS — CHERRY GELATO PRINT SHEET <small>Universal QR · skexotics.com/cherry-gelato</small></div>
-<button class="btn" onclick="window.print()">🖨️ PRINT STICKERS</button>
+<div class="screen">🍒 SK EXOTICS — CHERRY GELATO PRINT SHEET <small>5 unique QR codes · one per jar</small></div>
+<button class="btn" onclick="window.print()">🖨️ PRINT (5 QR CODES)</button>
 <div id="pages"></div>
-
 <script>
-const URL='https://skexotics.com/cherry-gelato';
-const STRAIN='Cherry Gelato';
-const BRAND='SK EXOTICS';
-const BATCH='CHERRY-GEL-01';
-const PER_PAGE=12; // 3 columns × 4 rows
-const TOTAL=12; // change this number to print more/fewer stickers
-
+const urls=[
+  "https://skexotics.com/products/cherry-gelato-01.html",
+  "https://skexotics.com/products/cherry-gelato-02.html",
+  "https://skexotics.com/products/cherry-gelato-03.html",
+  "https://skexotics.com/products/cherry-gelato-04.html",
+  "https://skexotics.com/products/cherry-gelato-05.html"
+];
+const labels=[
+  "Cherry Gelato #01","Cherry Gelato #02","Cherry Gelato #03","Cherry Gelato #04","Cherry Gelato #05"
+];
 const pagesDiv=document.getElementById('pages');
-const totalPages=Math.ceil(TOTAL/PER_PAGE);
-
+const perPage=6;
+const totalPages=Math.ceil(urls.length/perPage);
 for(let p=0;p<totalPages;p++){
   const pg=document.createElement('div');pg.className='a4';
-  const start=p*PER_PAGE;
-  const end=Math.min(start+PER_PAGE,TOTAL);
+  const start=p*perPage;
+  const end=Math.min(start+perPage,urls.length);
   for(let i=start;i<end;i++){
     const el=document.createElement('div');el.className='sticker';
-    const today=new Date().toLocaleDateString('en-GB');
-    el.innerHTML=`
-      <div class="s-emoji">🍒</div>
-      <div class="s-top">${STRAIN}</div>
-      <div class="qr-wrap" id="q${i}"></div>
-      <div class="s-name">${BRAND}</div>
-      <div class="s-dates">Batch: ${BATCH}<br>Date: ${today}</div>
-      <div class="s-brand">skexotics.com</div>`;
+    el.innerHTML=`<div class="s-top">Cherry Gelato</div><div class="qr-wrap" id="q${i}"></div><div class="s-num">${labels[i]}</div><div class="s-dates">Cultivated: 06/01/2026<br>Packaged: 17/04/2026</div><div class="s-brand">SK EXOTICS</div>`;
     pg.appendChild(el);
   }
   pagesDiv.appendChild(pg);
 }
-
 window.addEventListener('load',()=>{
-  for(let i=0;i<TOTAL;i++){
+  urls.forEach((url,i)=>{
     new QRCode(document.getElementById('q'+i),{
-      text:URL,
-      width:120,
-      height:120,
-      colorDark:'#000000',
-      colorLight:'#ffffff',
+      text:url,width:130,height:130,
+      colorDark:'#000000',colorLight:'#ffffff',
       correctLevel:QRCode.CorrectLevel.H
     });
-  }
+  });
 });
-</script>
-</body></html>
+</script></body></html>
