@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8">
-<title>SK Exotics — Cherry Gelato — Print Sheet</title>
+<title>SK Exotics — Cherry Gelato — Print Sheet (128 QR Codes)</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 @page{size:A4;margin:8mm}
@@ -10,31 +10,282 @@ body{font-family:Arial,sans-serif;background:#fff}
 .screen small{color:#42A5F5;font-size:11px;font-weight:normal;font-family:Arial}
 .btn{display:block;margin:14px auto;padding:12px 40px;background:#1565C0;color:#FFD600;font-size:15px;font-weight:900;border:none;border-radius:8px;cursor:pointer;letter-spacing:1px}
 @media print{.screen,.btn{display:none!important}}
-.a4{width:210mm;min-height:297mm;page-break-after:always;padding:6mm;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:6mm}
-.sticker{border:2px solid #1565C0;border-radius:3mm;padding:3mm 2mm;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;aspect-ratio:1}
-.s-top{font-size:6.5pt;font-weight:900;letter-spacing:.5px;text-transform:uppercase;text-align:center;color:#1565C0;margin-bottom:2.5mm}
-.qr-wrap{border:2px solid #050A1A;padding:1.5mm;background:#fff;line-height:0}
-.s-num{font-size:10pt;font-weight:900;color:#050A1A;margin-top:2.5mm;letter-spacing:1px}
-.s-dates{font-size:5pt;color:#666;margin-top:1.5mm;text-align:center;line-height:1.6}
-.s-brand{font-size:5.5pt;font-weight:900;letter-spacing:2px;color:#1565C0;margin-top:1.5mm;text-transform:uppercase}
+.a4{width:210mm;min-height:297mm;page-break-after:always;padding:8mm;display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr);gap:8mm}
+.sticker{border:2px solid #1565C0;border-radius:3mm;padding:4mm 3mm;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff}
+.s-top{font-size:7pt;font-weight:900;letter-spacing:.5px;text-transform:uppercase;text-align:center;color:#1565C0;margin-bottom:3mm}
+.qr-wrap{border:2px solid #050A1A;padding:2mm;background:#fff;line-height:0}
+.s-num{font-size:11pt;font-weight:900;color:#050A1A;margin-top:3mm;letter-spacing:1px}
+.s-dates{font-size:5.5pt;color:#666;margin-top:1.5mm;text-align:center;line-height:1.6}
+.s-brand{font-size:6pt;font-weight:900;letter-spacing:2px;color:#1565C0;margin-top:1.5mm;text-transform:uppercase}
+.s-url{font-size:4.5pt;color:#999;margin-top:1mm;text-align:center;word-break:break-all;max-width:100px}
 </style></head>
 <body>
-<div class="screen">🍒 SK EXOTICS — CHERRY GELATO PRINT SHEET <small>5 unique QR codes · one per jar</small></div>
-<button class="btn" onclick="window.print()">🖨️ PRINT (5 QR CODES)</button>
+<div class="screen">🍒 SK EXOTICS — CHERRY GELATO PRINT SHEET <small>128 unique QR codes · one per jar · one-time scan</small></div>
+<button class="btn" onclick="window.print()">🖨️ PRINT ALL 128 QR CODES (32 pages)</button>
 <div id="pages"></div>
 <script>
 const urls=[
-  "https://skexotics.com/products/cherry-gelato-01.html",
-  "https://skexotics.com/products/cherry-gelato-02.html",
-  "https://skexotics.com/products/cherry-gelato-03.html",
-  "https://skexotics.com/products/cherry-gelato-04.html",
-  "https://skexotics.com/products/cherry-gelato-05.html"
+  "https://skexotics.com/products/j4pZ_0W6uy-41pOjfa_CyA.html",
+  "https://skexotics.com/products/gLjPN2piVVAzXvft78SyIA.html",
+  "https://skexotics.com/products/E0u96wxOjharixdSPZDE8g.html",
+  "https://skexotics.com/products/wZuB_os3Si_dkqur5sOclA.html",
+  "https://skexotics.com/products/GAVlvlh0kLt6Cpvi-GyA-A.html",
+  "https://skexotics.com/products/8cARRYJXmbvR2PA3G4SjXg.html",
+  "https://skexotics.com/products/jLu6y_reTRDfNMaaVo3_WQ.html",
+  "https://skexotics.com/products/rwwu8qIOqxWuQKhah84TCw.html",
+  "https://skexotics.com/products/rtDbow5w8CB-ikqEDHau7A.html",
+  "https://skexotics.com/products/702lei9F_tvfpwz1rRDgAg.html",
+  "https://skexotics.com/products/XxVY55lAYYKlPJsNogsJJA.html",
+  "https://skexotics.com/products/b_UzIlfyB711moPEzBxcAw.html",
+  "https://skexotics.com/products/LXz71xUe-7dS1TMLx_1pyw.html",
+  "https://skexotics.com/products/Ov9wbeSCQHgrHnT9VZ7C2A.html",
+  "https://skexotics.com/products/JRiqkuMXzi-jU5HlbTo07g.html",
+  "https://skexotics.com/products/AMT_5LNxiMq--I0xa3vHww.html",
+  "https://skexotics.com/products/4wBFuFMU6w2tdE5Lk7TX5Q.html",
+  "https://skexotics.com/products/Squcl0NUkVqRZOgJRLpUjw.html",
+  "https://skexotics.com/products/iK_mJnXC7WiZnGvX9AziTA.html",
+  "https://skexotics.com/products/i8Mwat2OeEIH1LcNtQ8Aog.html",
+  "https://skexotics.com/products/x_dhpql_fmhp3AahGqZaog.html",
+  "https://skexotics.com/products/zO3mCqDw3w2olNj3sW5gAg.html",
+  "https://skexotics.com/products/P06w3UFwdV8gZvCR5Et5gw.html",
+  "https://skexotics.com/products/D8cTYjcXa6rOWzjpuaslmw.html",
+  "https://skexotics.com/products/HJhK-C5O2-46sQVXi9WUNg.html",
+  "https://skexotics.com/products/Zett6gqAgNIFwCGLnbQeCA.html",
+  "https://skexotics.com/products/18vZkotTgC-5ys4PVo_9nw.html",
+  "https://skexotics.com/products/9XcbydRXofj2CrgbzWMm1g.html",
+  "https://skexotics.com/products/c3oOJLH-cccI4i7E8iIDgg.html",
+  "https://skexotics.com/products/F8QBKnqszqfKCjv6k2nv4Q.html",
+  "https://skexotics.com/products/KFKWgHLsM3D-877GuZ1SLw.html",
+  "https://skexotics.com/products/QkyU2caDojXha_WPC63TKw.html",
+  "https://skexotics.com/products/s3iBvAyhJa5CLVfocMeIFg.html",
+  "https://skexotics.com/products/OPpys6C46xV9pmir9bORsw.html",
+  "https://skexotics.com/products/_nWErpZPtMoeGuRjeq_c-Q.html",
+  "https://skexotics.com/products/cyYHg7KEAoGib9bvKt1vWQ.html",
+  "https://skexotics.com/products/yshT_1GFgcD7xK0XSDcKBA.html",
+  "https://skexotics.com/products/cy7EuJry-RDL-B0a0F7UKQ.html",
+  "https://skexotics.com/products/ZFP3l-7JXjl0W_-JP_R_mw.html",
+  "https://skexotics.com/products/-V5g2XWlbkENHUjapW1Aog.html",
+  "https://skexotics.com/products/Rzy-XEQmsIi3FDLTI1nFQg.html",
+  "https://skexotics.com/products/IR33ghQEEXuRrM8Vu9SJwQ.html",
+  "https://skexotics.com/products/N1S27DAdVXJvZJ8unOBX2A.html",
+  "https://skexotics.com/products/mrn9VwqosxxgtK9AVXWMPg.html",
+  "https://skexotics.com/products/4F80b5yynQHkmFATqnTSdA.html",
+  "https://skexotics.com/products/j7eMhuo2TScnfeZEUZQwbA.html",
+  "https://skexotics.com/products/R_Gf65u3VfGkl6J0IPw8oA.html",
+  "https://skexotics.com/products/owXgLW5fpZX6T3A6gaEE7Q.html",
+  "https://skexotics.com/products/VXWGWSgxgwFA-DLobDNSdA.html",
+  "https://skexotics.com/products/TvsDCLmRIq_BdsVLW79rag.html",
+  "https://skexotics.com/products/a_iN-nlRkd23sYcyqN7Otg.html",
+  "https://skexotics.com/products/czy6ERfGV0x4XQ2uwGtRzA.html",
+  "https://skexotics.com/products/lFneetv4F0f8tdAc9-Mxzw.html",
+  "https://skexotics.com/products/ccTHBqrq7QiL1EsL66hbMg.html",
+  "https://skexotics.com/products/xADni35Jb2t3MdoRFgu9hQ.html",
+  "https://skexotics.com/products/4K9laY5Wk3C-QU8YAk3_kQ.html",
+  "https://skexotics.com/products/6lexN59bE2hqpsFtUSWzMA.html",
+  "https://skexotics.com/products/FF_q7szu6t8cPCnNgNFTxA.html",
+  "https://skexotics.com/products/sheiNVJXwQ_PErz7WB9F-A.html",
+  "https://skexotics.com/products/IzS41fLvqdNhHIYF8VYXJg.html",
+  "https://skexotics.com/products/j6bqqd34JEAGWnkiWQfRzQ.html",
+  "https://skexotics.com/products/Tm7po1gPy5tzLkG24hfT1Q.html",
+  "https://skexotics.com/products/TGv5I858oZh93Ju965-yRA.html",
+  "https://skexotics.com/products/MWnsBFwYmi6yz7lsePOhnw.html",
+  "https://skexotics.com/products/FrFkEwfOkJrLxs8H8j1_rw.html",
+  "https://skexotics.com/products/EjIqFDC_E6Q0KTYLKoDlnw.html",
+  "https://skexotics.com/products/ryZlsiIs_NF3cL0qjtzaHQ.html",
+  "https://skexotics.com/products/nnVFYuejiTzSwKjUK75WAQ.html",
+  "https://skexotics.com/products/VU5oqkvLxXWUrsS2lSPcXQ.html",
+  "https://skexotics.com/products/1pYjRCH0HKoZ2m3Rb13bzA.html",
+  "https://skexotics.com/products/1koe3kL4ZXznALMEoGUs5A.html",
+  "https://skexotics.com/products/NTUzjXb0jTvC5QO0ic4iWQ.html",
+  "https://skexotics.com/products/fwIMkK9lVmFWQ0lSkOTWaQ.html",
+  "https://skexotics.com/products/uRA-fHEZrTPiZ6d5jNfLEw.html",
+  "https://skexotics.com/products/q_Wh3rD9y8cfQ7xFhgTzug.html",
+  "https://skexotics.com/products/dArraFH821RVxHSbVf3uBA.html",
+  "https://skexotics.com/products/YEysMsWZYcMVYbqlytpJIA.html",
+  "https://skexotics.com/products/ljp58NB8hsgWsXcllK__Eg.html",
+  "https://skexotics.com/products/QzQs6JDDdJGNwJuDg-Fr5A.html",
+  "https://skexotics.com/products/K_sw4Fv9zS4m54rRO1iyZw.html",
+  "https://skexotics.com/products/BjJKj4IIS0_BKfuhTI8TZw.html",
+  "https://skexotics.com/products/01tRkXNk2TbDeANdIaAH7g.html",
+  "https://skexotics.com/products/e1fph7w8qnrw9Zd8gLdz9g.html",
+  "https://skexotics.com/products/FzSgqWVmJlxTg8xvfoKkow.html",
+  "https://skexotics.com/products/5PnF03izvENLPFTX55CxPg.html",
+  "https://skexotics.com/products/3O2nWJfUzN-QWuYP-sDQng.html",
+  "https://skexotics.com/products/Lc-IQ-dOuIR7ZaUphI1-og.html",
+  "https://skexotics.com/products/_3kbr1mt6ePeQHxPLo6TFw.html",
+  "https://skexotics.com/products/geciFW8cddJwJt2-IHWCtQ.html",
+  "https://skexotics.com/products/FCO81XnAdGLOFXgpplGqBw.html",
+  "https://skexotics.com/products/3wnpa8ygeLGJiGSzAhjmPw.html",
+  "https://skexotics.com/products/gBvkvq_JPOWhb2uI71jQ4Q.html",
+  "https://skexotics.com/products/bVaIaFp_0imQXgadI8te3A.html",
+  "https://skexotics.com/products/3JuQ8jlYhbzoj2FQO_j2bw.html",
+  "https://skexotics.com/products/Yep41CoCs34RdnfqY-00vA.html",
+  "https://skexotics.com/products/1OsxxjXHQ3xRwIuTwwmezQ.html",
+  "https://skexotics.com/products/dF2m7So4wNC1fR7j_YOX-g.html",
+  "https://skexotics.com/products/tdT-sMBC1CTuJ0d0fS_yag.html",
+  "https://skexotics.com/products/gTtSB68_-nkEKkyubG8W3w.html",
+  "https://skexotics.com/products/I7luuRxJNdijn4ghlJQLTw.html",
+  "https://skexotics.com/products/ysFWk8YaWwO8sL3p9sXNqA.html",
+  "https://skexotics.com/products/OGibTAozC1WD3N-B6WC08w.html",
+  "https://skexotics.com/products/zKlGa3LBUh8hcWOCEinPuw.html",
+  "https://skexotics.com/products/PGXnjA6RmKgowBH8i1UbdA.html",
+  "https://skexotics.com/products/fgTt52aqtWg91haicp_iWQ.html",
+  "https://skexotics.com/products/ZDLdxilhmqDQEzZwZio7uQ.html",
+  "https://skexotics.com/products/ExsSmfU1XYocpc6DYxrIwg.html",
+  "https://skexotics.com/products/snz26NqpKGJP1BAnVRp4sQ.html",
+  "https://skexotics.com/products/cLudVU1hDnHaVQeGwDHBPQ.html",
+  "https://skexotics.com/products/FXLjOTjPpGcKsMkzHD4ZzA.html",
+  "https://skexotics.com/products/0hL3Aij3VOMnyzIRgd2fQQ.html",
+  "https://skexotics.com/products/ngscG-8b81ozIlb-CGJBEw.html",
+  "https://skexotics.com/products/a-ZkPPQuIDHNIYmvoPtWqQ.html",
+  "https://skexotics.com/products/5Tqx50ehnKSsjPlql8VgoA.html",
+  "https://skexotics.com/products/lzlAHptlyxPYp1mwkylCZQ.html",
+  "https://skexotics.com/products/AgTcFbhbmwFLn-LR-dqTuQ.html",
+  "https://skexotics.com/products/g5zIONDveDySWevWhsGcIQ.html",
+  "https://skexotics.com/products/YchiC_OosWIK_CECz6Lv5Q.html",
+  "https://skexotics.com/products/lg3YTGEvoKsYY_QG6_DzLw.html",
+  "https://skexotics.com/products/epDw0DwT_dG8__C-31q_Gw.html",
+  "https://skexotics.com/products/49mK8gfaB4dlW6MN1dBbhg.html",
+  "https://skexotics.com/products/HhtgjB3ISofgus8DCip-Pg.html",
+  "https://skexotics.com/products/mmviFRWByKuTY16nhc-qeQ.html",
+  "https://skexotics.com/products/EA7J-DjLFu1DkkcXVg4nDQ.html",
+  "https://skexotics.com/products/OawcAMc-sKH2oC6oPC9k7g.html",
+  "https://skexotics.com/products/21aCAr8rs0GpmooggS53IA.html",
+  "https://skexotics.com/products/2r4Wl6x4xNgkjIioiP32Qg.html",
+  "https://skexotics.com/products/fO3rAdLu2pX1qOJcVuQmLQ.html"
 ];
 const labels=[
-  "Cherry Gelato #01","Cherry Gelato #02","Cherry Gelato #03","Cherry Gelato #04","Cherry Gelato #05"
+  "Cherry Gelato #001",
+  "Cherry Gelato #002",
+  "Cherry Gelato #003",
+  "Cherry Gelato #004",
+  "Cherry Gelato #005",
+  "Cherry Gelato #006",
+  "Cherry Gelato #007",
+  "Cherry Gelato #008",
+  "Cherry Gelato #009",
+  "Cherry Gelato #010",
+  "Cherry Gelato #011",
+  "Cherry Gelato #012",
+  "Cherry Gelato #013",
+  "Cherry Gelato #014",
+  "Cherry Gelato #015",
+  "Cherry Gelato #016",
+  "Cherry Gelato #017",
+  "Cherry Gelato #018",
+  "Cherry Gelato #019",
+  "Cherry Gelato #020",
+  "Cherry Gelato #021",
+  "Cherry Gelato #022",
+  "Cherry Gelato #023",
+  "Cherry Gelato #024",
+  "Cherry Gelato #025",
+  "Cherry Gelato #026",
+  "Cherry Gelato #027",
+  "Cherry Gelato #028",
+  "Cherry Gelato #029",
+  "Cherry Gelato #030",
+  "Cherry Gelato #031",
+  "Cherry Gelato #032",
+  "Cherry Gelato #033",
+  "Cherry Gelato #034",
+  "Cherry Gelato #035",
+  "Cherry Gelato #036",
+  "Cherry Gelato #037",
+  "Cherry Gelato #038",
+  "Cherry Gelato #039",
+  "Cherry Gelato #040",
+  "Cherry Gelato #041",
+  "Cherry Gelato #042",
+  "Cherry Gelato #043",
+  "Cherry Gelato #044",
+  "Cherry Gelato #045",
+  "Cherry Gelato #046",
+  "Cherry Gelato #047",
+  "Cherry Gelato #048",
+  "Cherry Gelato #049",
+  "Cherry Gelato #050",
+  "Cherry Gelato #051",
+  "Cherry Gelato #052",
+  "Cherry Gelato #053",
+  "Cherry Gelato #054",
+  "Cherry Gelato #055",
+  "Cherry Gelato #056",
+  "Cherry Gelato #057",
+  "Cherry Gelato #058",
+  "Cherry Gelato #059",
+  "Cherry Gelato #060",
+  "Cherry Gelato #061",
+  "Cherry Gelato #062",
+  "Cherry Gelato #063",
+  "Cherry Gelato #064",
+  "Cherry Gelato #065",
+  "Cherry Gelato #066",
+  "Cherry Gelato #067",
+  "Cherry Gelato #068",
+  "Cherry Gelato #069",
+  "Cherry Gelato #070",
+  "Cherry Gelato #071",
+  "Cherry Gelato #072",
+  "Cherry Gelato #073",
+  "Cherry Gelato #074",
+  "Cherry Gelato #075",
+  "Cherry Gelato #076",
+  "Cherry Gelato #077",
+  "Cherry Gelato #078",
+  "Cherry Gelato #079",
+  "Cherry Gelato #080",
+  "Cherry Gelato #081",
+  "Cherry Gelato #082",
+  "Cherry Gelato #083",
+  "Cherry Gelato #084",
+  "Cherry Gelato #085",
+  "Cherry Gelato #086",
+  "Cherry Gelato #087",
+  "Cherry Gelato #088",
+  "Cherry Gelato #089",
+  "Cherry Gelato #090",
+  "Cherry Gelato #091",
+  "Cherry Gelato #092",
+  "Cherry Gelato #093",
+  "Cherry Gelato #094",
+  "Cherry Gelato #095",
+  "Cherry Gelato #096",
+  "Cherry Gelato #097",
+  "Cherry Gelato #098",
+  "Cherry Gelato #099",
+  "Cherry Gelato #100",
+  "Cherry Gelato #101",
+  "Cherry Gelato #102",
+  "Cherry Gelato #103",
+  "Cherry Gelato #104",
+  "Cherry Gelato #105",
+  "Cherry Gelato #106",
+  "Cherry Gelato #107",
+  "Cherry Gelato #108",
+  "Cherry Gelato #109",
+  "Cherry Gelato #110",
+  "Cherry Gelato #111",
+  "Cherry Gelato #112",
+  "Cherry Gelato #113",
+  "Cherry Gelato #114",
+  "Cherry Gelato #115",
+  "Cherry Gelato #116",
+  "Cherry Gelato #117",
+  "Cherry Gelato #118",
+  "Cherry Gelato #119",
+  "Cherry Gelato #120",
+  "Cherry Gelato #121",
+  "Cherry Gelato #122",
+  "Cherry Gelato #123",
+  "Cherry Gelato #124",
+  "Cherry Gelato #125",
+  "Cherry Gelato #126",
+  "Cherry Gelato #127",
+  "Cherry Gelato #128"
 ];
 const pagesDiv=document.getElementById('pages');
-const perPage=6;
+const perPage=4;
 const totalPages=Math.ceil(urls.length/perPage);
 for(let p=0;p<totalPages;p++){
   const pg=document.createElement('div');pg.className='a4';
@@ -42,7 +293,8 @@ for(let p=0;p<totalPages;p++){
   const end=Math.min(start+perPage,urls.length);
   for(let i=start;i<end;i++){
     const el=document.createElement('div');el.className='sticker';
-    el.innerHTML=`<div class="s-top">Cherry Gelato</div><div class="qr-wrap" id="q${i}"></div><div class="s-num">${labels[i]}</div><div class="s-dates">Cultivated: 06/01/2026<br>Packaged: 17/04/2026</div><div class="s-brand">SK EXOTICS</div>`;
+    const shortUrl=urls[i].replace('https://skexotics.com/products/','skexotics.com/...').substring(0,30)+'...';
+    el.innerHTML=`<div class="s-top">🍒 Cherry Gelato</div><div class="qr-wrap" id="q${i}"></div><div class="s-num">${labels[i]}</div><div class="s-dates">Cultivated: 06/01/2026<br>Packaged: 17/04/2026</div><div class="s-brand">SK EXOTICS</div>`;
     pg.appendChild(el);
   }
   pagesDiv.appendChild(pg);
@@ -50,7 +302,7 @@ for(let p=0;p<totalPages;p++){
 window.addEventListener('load',()=>{
   urls.forEach((url,i)=>{
     new QRCode(document.getElementById('q'+i),{
-      text:url,width:130,height:130,
+      text:url,width:170,height:170,
       colorDark:'#000000',colorLight:'#ffffff',
       correctLevel:QRCode.CorrectLevel.H
     });
