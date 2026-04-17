@@ -111,7 +111,7 @@ async function processScan(){
   const rawUser=localStorage.getItem('sk_user');
   if(!rawUser){
     banner.className='scan-banner first';
-    banner.innerHTML=`<h3>🎉 AUTHENTIC JAR!</h3><p>This is a genuine SK Exotics product.</p><span class="pts">+15 PTS</span><p>Login or register to claim your points!</p><a class="login-btn" href="/login.html?jar=blueberry-zour-04">CLAIM MY POINTS</a>`;
+    banner.innerHTML=`<h3>🎉 AUTHENTIC ${PRODUCT_LABEL}!</h3><p>This is a genuine SK Exotics product.</p><span class="pts">+${POINTS_EARNED} PTS</span><p>Login or register to claim your points!</p><a class="login-btn" href="/login.html?jar=blueberry-zour-04">CLAIM MY POINTS</a>`;
     localStorage.setItem('sk_pending_scan',JAR_ID);
     return;
   }
@@ -123,7 +123,7 @@ async function processScan(){
   user.points=newPoints;
   localStorage.setItem('sk_user',JSON.stringify(user));
   banner.className='scan-banner first';
-  banner.innerHTML=`<h3>✅ POINTS EARNED!</h3><p>Welcome back, ${(user.name||user.phone)}!</p><span class="pts">+15 PTS</span><p>You now have <strong style="color:var(--gold)">${newPoints} total points</strong>.</p><a class="login-btn" href="/dashboard.html">VIEW MY REWARDS</a>`;
+  banner.innerHTML=`<h3>✅ POINTS EARNED!</h3><p>Welcome back, ${(user.name||user.phone)}!</p><span class="pts">+${POINTS_EARNED} PTS</span><p>You now have <strong style="color:var(--gold)">${newPoints} total points</strong>.</p><a class="login-btn" href="/dashboard.html">VIEW MY REWARDS</a>`;
 }
 processScan();
 </script>

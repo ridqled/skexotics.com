@@ -102,6 +102,9 @@ const SUPABASE_URL = 'https://duxcejvqicvdidnnhbnc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1eGNlanZxaWN2ZGlkbm5oYm5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTY1OTIsImV4cCI6MjA4ODgzMjU5Mn0.5DUgoKJ6NLkSTDjn6thmLmEVQpy3rU5TRafw0xykpdA';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const JAR_ID = 'moonbow-skittles-05';
+const IS_CHERRY_PACK = /^cherry-gelato/.test(JAR_ID);
+const POINTS_EARNED = IS_CHERRY_PACK ? 5 : 15;
+const PRODUCT_LABEL = IS_CHERRY_PACK ? 'PACK' : 'JAR';
 
 async function processScan() {
   const banner = document.getElementById('scan-banner');
@@ -127,9 +130,9 @@ async function processScan() {
     // Record the scan attempt, ask to login
     banner.className = 'scan-banner first';
     banner.innerHTML = `
-      <h3>🎉 AUTHENTIC JAR!</h3>
+      <h3>🎉 AUTHENTIC ${PRODUCT_LABEL}!</h3>
       <p>This is a genuine SK Exotics product.</p>
-      <span class="pts">+15 PTS</span>
+      <span class="pts">+${POINTS_EARNED} PTS</span>
       <p>Login or create an account to claim your points and build towards rewards!</p>
       <a class="login-btn" href="/login.html?jar=moonbow-skittles-05">CLAIM MY POINTS</a>
     `;
@@ -154,7 +157,7 @@ async function processScan() {
   }
 
   // Update points
-  const newPoints = (user.points || 0) + 15;
+  const newPoints = (user.points || 0) + POINTS_EARNED;
   await sb.from('users').update({ points: newPoints }).eq('id', user.id);
   user.points = newPoints;
   localStorage.setItem('sk_user', JSON.stringify(user));
@@ -163,7 +166,7 @@ async function processScan() {
   banner.innerHTML = `
     <h3>✅ POINTS EARNED!</h3>
     <p>Welcome back, ${(user.name || user.phone)}!</p>
-    <span class="pts">+15 PTS</span>
+    <span class="pts">+${POINTS_EARNED} PTS</span>
     <p>You now have <strong style="color:var(--gold)">${newPoints} total points</strong>.</p>
     <a class="login-btn" href="/dashboard.html">VIEW MY REWARDS</a>
   `;

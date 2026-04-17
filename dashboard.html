@@ -73,7 +73,7 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-
   <div class="points-card">
     <div class="points-label">YOUR POINTS</div>
     <div class="points-num" id="user-points">0</div>
-    <div class="points-sub">15 POINTS PER JAR SCANNED</div>
+    <div class="points-sub">5 PTS PER CHERRY PACK · 15 PTS PER SK JAR</div>
     <div class="progress-section">
       <div class="progress-label">
         <span id="prog-label">NEXT REWARD</span>
@@ -88,12 +88,28 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-
 
 <div class="section-title">🏆 REWARDS LADDER</div>
 <div class="rewards-ladder" id="rewards-ladder">
-  <div class="reward-item" id="r75">
+  <div class="reward-item" id="r40">
     <div class="reward-icon">🎁</div>
+    <div class="reward-pts">40<span>PTS</span></div>
+    <div class="reward-info">
+      <h3>FREE PACK</h3>
+      <p>Claim one free pack</p>
+    </div>
+  </div>
+  <div class="reward-item" id="r70">
+    <div class="reward-icon">🍒</div>
+    <div class="reward-pts">70<span>PTS</span></div>
+    <div class="reward-info">
+      <h3>2 FREE PACKS</h3>
+      <p>Redeem for two free packs</p>
+    </div>
+  </div>
+  <div class="reward-item" id="r75">
+    <div class="reward-icon">🏆</div>
     <div class="reward-pts">75<span>PTS</span></div>
     <div class="reward-info">
-      <h3>FREE JAR</h3>
-      <p>Claim one free jar of your choice</p>
+      <h3>FREE SK JAR</h3>
+      <p>Claim one free SK jar</p>
     </div>
   </div>
   <div class="reward-item" id="r100">
@@ -145,13 +161,13 @@ function logout() {
 }
 
 function updateProgress(points) {
-  const thresholds = [75,100,150,200];
-  const next = thresholds.find(t => t > points) || 200;
+  const thresholds = [40,70,75,100];
+  const next = thresholds.find(t => t > points) || 100;
   const prev = thresholds.filter(t => t <= points).pop() || 0;
   const pct = Math.min(100, ((points - prev) / (next - prev)) * 100);
   document.getElementById('prog-fill').style.width = pct + '%';
   document.getElementById('prog-next').textContent = next + ' pts';
-  document.getElementById('prog-label').textContent = points >= 200 ? 'MAX TIER REACHED' : 'NEXT REWARD';
+  document.getElementById('prog-label').textContent = points >= 100 ? 'MAX TIER REACHED' : 'NEXT REWARD';
 
   REWARDS.forEach(r => {
     const el = document.getElementById(r.id);

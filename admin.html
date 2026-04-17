@@ -138,10 +138,10 @@ function adminLogin() {
 }
 
 function rewardTier(pts) {
-  if (pts >= 200) return '<span class="reward-tag rt-200">💎 200 — FREE JAR + 20% OFF</span>';
-  if (pts >= 150) return '<span class="reward-tag rt-150">👑 150 — 2 JARS + 7G</span>';
-  if (pts >= 100) return '<span class="reward-tag rt-100">💰 100 — 20% OFF</span>';
-  if (pts >= 75) return '<span class="reward-tag rt-75">🎁 75 — FREE JAR</span>';
+  if (pts >= 100) return '<span class="reward-tag rt-100">💰 100 — 20% OFF + 2 FREE PACKS</span>';
+  if (pts >= 75) return '<span class="reward-tag rt-75">🏆 75 — FREE SK JAR</span>';
+  if (pts >= 70) return '<span class="reward-tag rt-75">🍒 70 — 2 FREE PACKS</span>';
+  if (pts >= 40) return '<span class="reward-tag rt-75">🎁 40 — FREE PACK</span>';
   return '<span class="reward-tag rt-none">—</span>';
 }
 
