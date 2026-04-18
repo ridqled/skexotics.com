@@ -138,10 +138,10 @@ function adminLogin() {
 }
 
 function rewardTier(pts) {
-  if (pts >= 100) return '<span class="reward-tag rt-100">💰 100 — 20% OFF + 2 FREE PACKS</span>';
-  if (pts >= 75) return '<span class="reward-tag rt-75">🏆 75 — FREE SK JAR</span>';
-  if (pts >= 70) return '<span class="reward-tag rt-75">🍒 70 — 2 FREE PACKS</span>';
-  if (pts >= 40) return '<span class="reward-tag rt-75">🎁 40 — FREE PACK</span>';
+  if (pts >= 200) return '<span class="reward-tag rt-200">💎 200 — FREE JAR + 20% OFF</span>';
+  if (pts >= 150) return '<span class="reward-tag rt-150">👑 150 — 2 JARS + 7G</span>';
+  if (pts >= 100) return '<span class="reward-tag rt-100">💰 100 — 20% OFF</span>';
+  if (pts >= 75) return '<span class="reward-tag rt-75">🎁 75 — FREE JAR</span>';
   return '<span class="reward-tag rt-none">—</span>';
 }
 
@@ -155,7 +155,10 @@ function renderUsers(users) {
       <td style="color:var(--muted);font-size:11px">${new Date(u.created_at).toLocaleDateString('en-GB')}</td>
       <td>
         <button class="adj-btn adj-add" onclick="adjustPoints('${u.id}',15)">+15</button>
+        <button class="adj-btn adj-add" onclick="adjustPoints('${u.id}',5)" style="margin-left:4px">+5</button>
+        <button class="adj-btn adj-sub" onclick="adjustPoints('${u.id}',-5)" style="margin-left:4px">-5</button>
         <button class="adj-btn adj-sub" onclick="adjustPoints('${u.id}',-15)" style="margin-left:4px">-15</button>
+        <button class="adj-btn" onclick="resetScans('${u.id}')" style="margin-left:4px;background:rgba(229,57,53,0.15);color:#EF9A9A;border:1px solid rgba(229,57,53,0.3)">RESET</button>
       </td>
     </tr>
   `).join('');
@@ -193,6 +196,16 @@ async function adjustPoints(userId, delta) {
   user.points = newPts;
   renderUsers(allUsers);
   document.getElementById('stat-pts').textContent = allUsers.reduce((a,u)=>a+u.points,0);
+}
+
+async function resetScans(userId) {
+  if (!confirm('Reset all scanned packs for this user? Their points will stay but all their QR scans will be marked as fresh and reusable.')) return;
+  const user = allUsers.find(u => u.id === userId);
+  if (!user) return;
+  await sb.from('scans').update({scanned_by: null, scanned_at: null}).eq('scanned_by', userId);
+  allScans = allScans.map(s => s.scanned_by === userId ? {...s, scanned_by: null, scanned_at: null} : s);
+  renderScans(allScans);
+  document.getElementById('stat-scans').textContent = allScans.filter(s=>s.scanned_by).length;
 }
 
 async function loadData() {
